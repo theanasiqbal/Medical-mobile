@@ -1,0 +1,70 @@
+/* global.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Healthcare-inspired color palette converted to HSL for NativeWind compatibility */
+    --background: 0 0% 98%;
+    --foreground: 0 0% 20%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 20%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 20%;
+    --primary: 217.43 62% 44%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 156.63 78% 30%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 92%;
+    --muted-foreground: 0 0% 50%;
+    --accent: 130 70% 60%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 94%;
+    --input: 0 0% 96%;
+    --ring: 240 80% 50%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 0 0% 15%;
+    --foreground: 0 0% 95%;
+    --card: 0 0% 22%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 22%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 240 80% 60%;
+    --primary-foreground: 0 0% 95%;
+    --secondary: 160 60% 65%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 0 0% 35%;
+    --muted-foreground: 0 0% 70%;
+    --accent: 130 70% 70%;
+    --accent-foreground: 0 0% 95%;
+    --destructive: 0 70% 40%;
+    --destructive-foreground: 0 70% 64%;
+    --border: 0 0% 32%;
+    --input: 0 0% 28%;
+    --ring: 240 80% 60%;
+  }
+}
+
+@layer components {
+  .health-card {
+    @apply rounded-2xl bg-card shadow-sm border border-border;
+  }
+
+  .health-badge {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-sm font-medium bg-secondary/10 text-secondary;
+  }
+
+  .health-button-primary {
+    @apply px-4 py-3 rounded-xl bg-primary text-primary-foreground font-medium;
+  }
+
+  .health-button-secondary {
+    @apply px-4 py-3 rounded-xl border border-primary text-primary font-medium;
+  }
+}
