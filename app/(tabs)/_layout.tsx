@@ -9,8 +9,8 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-    const { t } = useLanguage()
-  
+  const { t } = useLanguage()
+
   const colors = {
     light: {
       background: '#ffffff',
@@ -89,6 +89,13 @@ export default function TabLayout() {
         options={{
           title: t("labs"),
           tabBarIcon: ({ color }) => <MaterialCommunityIcons name="flask" size={28} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="prescription-dispatch"
+        options={{
+          title: t("pharmacy"),
+          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="pill" size={28} color={color} />,
         }}
       />
       <Tabs.Screen

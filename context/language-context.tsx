@@ -1,6 +1,12 @@
 // context/language-context.tsx
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 type Language = "en" | "hi";
 
 interface LanguageContextType {
@@ -9,7 +15,9 @@ interface LanguageContextType {
   t: (key: string) => string;
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextType | undefined>(
+  undefined,
+);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>("en");
@@ -21,7 +29,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const loadLanguage = async () => {
     try {
-      const stored = await AsyncStorage.getItem("language") as Language | null;
+      const stored = (await AsyncStorage.getItem(
+        "language",
+      )) as Language | null;
       if (stored && (stored === "en" || stored === "hi")) {
         setLanguageState(stored);
       }
@@ -166,6 +176,37 @@ const translations = {
     enterYourAddress: "Enter your address",
     proceedToPayment: "Proceed to Payment",
     bookTest: "Book Test",
+
+    // Pharmacy Screen (Prescription Dispatch)
+    sendPrescription: "Send Prescription",
+    pharmacySubtitle: "Central Pharmacy – City Hub",
+    uploadPrescription: "Upload Prescription",
+    supportedFormats: "JPG / PNG / PDF supported",
+    pickupInformation: "Pickup Information",
+    hospital: "Hospital",
+    address: "Address",
+    doctor: "Doctor",
+    contact: "Contact",
+    expectedDelivery: "Expected Delivery",
+    additionalInstructions: "Additional Instructions",
+    notesPlaceholder: "Additional instructions for pharmacy (optional)",
+    sendToPharmacy: "Send to Pharmacy",
+    uploadingPrescription: "Uploading Prescription...",
+    notifyingPharmacy: "Notifying Pharmacy...",
+    pleaseWait: "Please do not close this screen",
+    prescriptionSentSuccessfully: "Prescription Sent Successfully",
+    processingShortly:
+      "The pharmacy has received your prescription and will begin processing it shortly.",
+    orderId: "Order ID",
+    pharmacy: "Pharmacy",
+    estimatedDispatch: "Estimated Dispatch",
+    trackOrder: "Track Order",
+    pendingReview: "Pending Review",
+    waitingForPharmacy: "Waiting for pharmacy to review",
+    acceptedByPharmacy: "Accepted by Pharmacy",
+    preparingMedicines: "Preparing Medicines",
+    outForDelivery: "Out for Delivery",
+    delivered: "Delivered",
   },
   hi: {
     welcome: "स्वागत है, राज!",
@@ -180,7 +221,8 @@ const translations = {
     homeCollection: "घर पर संग्रह",
     bookSampleCollection: "घर पर नमूना संग्रह बुक करें",
     specialOffer: "विशेष ऑफर",
-    discountText: "सभी पैथोलॉजी पैकेज पर 20% छूट प्राप्त करें। कोड HEALTH20 का उपयोग करें",
+    discountText:
+      "सभी पैथोलॉजी पैकेज पर 20% छूट प्राप्त करें। कोड HEALTH20 का उपयोग करें",
     recommendedTests: "अनुशंसित परीक्षण",
     monthly: "मासिक",
     quarterly: "त्रैमासिक",
@@ -262,5 +304,36 @@ const translations = {
     enterYourAddress: "अपना पता दर्ज करें",
     proceedToPayment: "भुगतान के लिए आगे बढ़ें",
     bookTest: "परीक्षण बुक करें",
+
+    // Pharmacy Screen (Prescription Dispatch)
+    sendPrescription: "प्रिस्क्रिप्शन भेजें",
+    pharmacySubtitle: "सेंट्रल फार्मेसी - सिटी हब",
+    uploadPrescription: "प्रिस्क्रिप्शन अपलोड करें",
+    supportedFormats: "JPG / PNG / PDF समर्थित",
+    pickupInformation: "पिकअप जानकारी",
+    hospital: "अस्पताल",
+    address: "पता",
+    doctor: "डॉक्टर",
+    contact: "संपर्क",
+    expectedDelivery: "अपेक्षित डिलीवरी",
+    additionalInstructions: "अतिरिक्त निर्देश",
+    notesPlaceholder: "फार्मेसी के लिए अतिरिक्त निर्देश (वैकल्पिक)",
+    sendToPharmacy: "फार्मेसी को भेजें",
+    uploadingPrescription: "प्रिस्क्रिप्शन अपलोड हो रहा है...",
+    notifyingPharmacy: "फार्मेसी को सूचित किया जा रहा है...",
+    pleaseWait: "कृपया इस स्क्रीन को बंद न करें",
+    prescriptionSentSuccessfully: "प्रिस्क्रिप्शन सफलतापूर्वक भेजा गया",
+    processingShortly:
+      "फार्मेसी को आपका प्रिस्क्रिप्शन मिल गया है और जल्द ही इसे संसाधित करना शुरू कर देगी।",
+    orderId: "ऑर्डर आईडी",
+    pharmacy: "फार्मेसी",
+    estimatedDispatch: "अनुमानित प्रेषण",
+    trackOrder: "ऑर्डर ट्रैक करें",
+    pendingReview: "समीक्षा लंबित",
+    waitingForPharmacy: "फार्मेसी की समीक्षा की प्रतीक्षा में",
+    acceptedByPharmacy: "फार्मेसी द्वारा स्वीकृत",
+    preparingMedicines: "दवाइयां तैयार हो रही हैं",
+    outForDelivery: "डिलीवरी के लिए बाहर है",
+    delivered: "पहुंचा दिया गया",
   },
 };
