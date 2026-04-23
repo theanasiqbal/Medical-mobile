@@ -125,13 +125,22 @@ export default function HomeScreen({ onCardClick }: any) {
         contentContainerClassName="w-full max-w-lg mx-auto px-4 pt-6 pb-4"
       >
         {/* Welcome Header */}
-        <View className="mb-6">
-          <Text className="text-3xl font-bold text-foreground mb-1">
-            {userName ? `${t("welcome")}, ${userName}` : t("welcome")}
-          </Text>
-          <Text className="text-muted-foreground">
-            {t("dashboardSubtitle")}
-          </Text>
+        <View className="mb-6 flex-row justify-between items-start">
+          <View className="flex-1 pr-4">
+            <Text className="text-3xl font-bold text-foreground mb-1">
+              {userName ? `${t("welcome")}, ${userName}` : t("welcome")}
+            </Text>
+            <Text className="text-muted-foreground">
+              {t("dashboardSubtitle")}
+            </Text>
+          </View>
+          <Pressable 
+            onPress={() => router.push("/notifications")}
+            className="h-12 w-12 items-center justify-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm"
+          >
+            <MaterialCommunityIcons name="bell-outline" size={24} color="#64748b" />
+            <View className="absolute top-3 right-3 h-2.5 w-2.5 rounded-full bg-red-500 border-2 border-white dark:border-slate-900" />
+          </Pressable>
         </View>
 
         {/* Search Bar */}

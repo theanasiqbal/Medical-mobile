@@ -113,6 +113,18 @@ export const patientApi = {
       body: { expo_push_token: pushToken },
       token,
     }),
+
+  getNotifications: (token: string) =>
+    apiRequest<{ success: boolean; notifications: any[] }>('/patient/notifications', {
+      method: 'GET',
+      token,
+    }),
+
+  markNotificationRead: (id: string, token: string) =>
+    apiRequest<{ success: boolean }>(`/patient/notifications/${id}/read`, {
+      method: 'PATCH',
+      token,
+    }),
 };
 
 export interface DoctorDb {
