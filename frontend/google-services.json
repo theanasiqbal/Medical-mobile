@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "870098970889",
+    "project_id": "medical-7f8f2",
+    "storage_bucket": "medical-7f8f2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:870098970889:android:863c367585a025d4060bd8",
+        "android_client_info": {
+          "package_name": "com.theanasiqbal.medicalapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPZN6QBRDERZ41SXfc-KFlihzJ2TwS5OY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
