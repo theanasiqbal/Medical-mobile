@@ -9,7 +9,7 @@
  */
 
 // Replace with your laptop's WiFi IP (run `ipconfig` in PowerShell)
-export const BACKEND_URL = 'http://192.168.1.11:3000'; // Correct IP from ipconfig
+export const BACKEND_URL = 'http://192.168.1.6:3000'; // Correct IP from ipconfig
 
 /** AsyncStorage key for the JWT session token */
 export const TOKEN_STORAGE_KEY = '@medical_app/auth_token';
