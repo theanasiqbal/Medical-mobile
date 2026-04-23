@@ -319,6 +319,18 @@ opdRouter.patch('/appointments/:id/pay', async (req: Request, res: Response) => 
       return res.status(500).json({ success: false, error: 'Failed to process payment status' });
     }
 
+    // NEW: Store notification for the doctor
+    const notificationTitle = "Payment Received! 💰";
+    const notificationBody = `Emergency payment confirmed for ${data.patient_name || 'Patient'}. You can now start the session.`;
+    
+    await supabase.from('notifications').insert([{
+        user_id: String(data.doctor_id),
+        target_type: 'doctor',
+        title: notificationTitle,
+        body: notificationBody,
+        data: { appointmentId: id, patientName: data.patient_name }
+    }]);
+
     res.json({ success: true, appointment: data });
   } catch (e) {
     console.error('[opd/pay] error', e);

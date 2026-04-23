@@ -150,3 +150,79 @@ patientRouter.patch(
   }
 );
 
+/**
+ * GET /patient/notifications
+ * Retrieves notifications for the authenticated patient.
+ */
+patientRouter.get(
+  '/notifications',
+  authMiddleware,
+  async (req: AuthRequest, res: Response) => {
+    const patientId = req.patientId;
+    if (!patientId) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const supabase = getSupabase();
+
+    try {
+      const { data, error } = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('user_id', patientId)
+        .eq('target_type', 'patient')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('[notificationsGet] Supabase error:', error);
+        return res.status(500).json({ success: false, error: 'Failed to fetch notifications' });
+      }
+
+      res.status(200).json({
+        success: true,
+        notifications: data || [],
+      });
+    } catch (err) {
+      console.error('[notificationsGet] Unexpected error:', err);
+      res.status(500).json({ success: false, error: 'Internal server error' });
+    }
+  }
+);
+
+/**
+ * PATCH /patient/notifications/:id/read
+ * Marks a specific notification as read.
+ */
+patientRouter.patch(
+  '/notifications/:id/read',
+  authMiddleware,
+  async (req: AuthRequest, res: Response) => {
+    const { id } = req.params;
+    const patientId = req.patientId;
+
+    if (!patientId) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const supabase = getSupabase();
+
+    try {
+      const { error } = await supabase
+        .from('notifications')
+        .update({ is_read: true })
+        .eq('id', id)
+        .eq('user_id', patientId); // Security: ensure it belongs to this patient
+
+      if (error) {
+        console.error('[notificationRead] Supabase error:', error);
+        return res.status(500).json({ success: false, error: 'Failed to update notification' });
+      }
+
+      res.status(200).json({ success: true, message: 'Notification marked as read' });
+    } catch (err) {
+      console.error('[notificationRead] Unexpected error:', err);
+      res.status(500).json({ success: false, error: 'Internal server error' });
+    }
+  }
+);
+
