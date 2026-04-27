@@ -70,15 +70,26 @@ export default function HomeScreen({ onCardClick }: any) {
   const { appointments } = useAppointments();
   const [userName, setUserName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [now, setNow] = useState(new Date());
+
+  // Update 'now' every minute to refresh the join button status
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setNow(new Date());
+    }, 60000);
+    return () => clearInterval(timer);
+  }, []);
 
   const upcomingAppointments = useMemo(() => {
-    const now = new Date();
     const scheduled = appointments.filter(a => {
       const isScheduled = a.status === 'Scheduled' || String(a.status).toLowerCase() === 'scheduled';
       if (!isScheduled) return false;
 
       const aptTime = parseAppointmentDateTime(a.date, a.time);
-      if (!aptTime) return false;
+      if (!aptTime) {
+        // For emergency appointments, allow if scheduled even if time is missing
+        return String(a.type).toLowerCase().includes('emergency');
+      }
 
       // Hide if more than 15 minutes past
       const diffMins = (aptTime.getTime() - now.getTime()) / (1000 * 60);
@@ -92,7 +103,7 @@ export default function HomeScreen({ onCardClick }: any) {
     });
 
     return scheduled.slice(0, 2);
-  }, [appointments]);
+  }, [appointments, now]);
 
   useEffect(() => {
     if (!token) return;
@@ -265,9 +276,9 @@ export default function HomeScreen({ onCardClick }: any) {
                               }
                             }
                           }}
-                          className={`py-2.5 rounded-lg items-center ${isJoinEnabled(a?.date, a?.time) ? 'bg-[#2A5FB7]' : 'bg-slate-200'}`}
+                          className={`py-2.5 rounded-lg items-center ${isJoinEnabled(a?.date, a?.time, a?.type) ? 'bg-[#2A5FB7]' : 'bg-slate-200'}`}
                         >
-                          <Text className={`font-semibold ${isJoinEnabled(a?.date, a?.time) ? 'text-white' : 'text-slate-400'}`}>
+                          <Text className={`font-semibold ${isJoinEnabled(a?.date, a?.time, a?.type) ? 'text-white' : 'text-slate-400'}`}>
                             {t("joinVideoCall") || "Join Video Call"}
                           </Text>
                         </Pressable>
