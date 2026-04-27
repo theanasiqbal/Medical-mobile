@@ -1,5 +1,6 @@
 import { AuthProvider, useAuth } from '@/context/auth-context';
 import { AppointmentsProvider } from '@/context/appointments-context';
+import { NotificationsProvider } from '@/context/notifications-context';
 import { DoctorsProvider } from '@/context/doctors-context';
 import { LanguageProvider } from '@/context/language-context';
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -64,16 +65,19 @@ function RootNavigator() {
     <LanguageProvider>
       <DoctorsProvider>
         <AppointmentsProvider>
-          <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <NotificationsProvider>
+            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
           <Stack>
             <Stack.Screen name="index" options={{ headerShown: false }} />
             <Stack.Screen name="(auth)" options={{ headerShown: false }} />
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="profile-edit" options={{ headerShown: false }} />
+            <Stack.Screen name="notifications" options={{ headerShown: false }} />
           </Stack>
           <StatusBar style="auto" />
           <PortalHost />
-        </ThemeProvider>
+            </ThemeProvider>
+          </NotificationsProvider>
         </AppointmentsProvider>
       </DoctorsProvider>
     </LanguageProvider>

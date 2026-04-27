@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, type ReactNode, useCallback, useRef } from "react";
 import { AppState, AppStateStatus } from "react-native";
 import { opdApi } from "@/lib/api";
+import { supabase } from "@/lib/supabase";
 import { useAuth } from "./auth-context";
 
 interface AppointmentsContextType {
@@ -17,8 +18,6 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
   const [appointments, setAppointments] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
-  const pollingInterval = useRef<NodeJS.Timeout | null>(null);
 
   const fetchAppts = useCallback(async (showLoading = false) => {
     if (!profile?.id) {
@@ -43,21 +42,32 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
     }
   }, [profile?.id]);
 
-  // Initial load and periodic polling
+  // Initial load and Realtime subscription
   useEffect(() => {
     if (!profile?.id) return;
 
     fetchAppts(true);
 
-    // Poll every 30 seconds
-    pollingInterval.current = setInterval(() => {
-      fetchAppts(false);
-    }, 30000);
+    // Subscribe to REALTIME changes for this user's appointments
+    const channel = supabase
+      .channel('public:appointments')
+      .on(
+        'postgres_changes',
+        {
+          event: '*', // Listen for all events: INSERT, UPDATE, DELETE
+          schema: 'public',
+          table: 'appointments',
+          filter: `patient_id=eq.${profile.id}`,
+        },
+        (payload) => {
+          console.log('Appointment change detected:', payload.eventType);
+          fetchAppts(false);
+        }
+      )
+      .subscribe();
 
     return () => {
-      if (pollingInterval.current) {
-        clearInterval(pollingInterval.current);
-      }
+      supabase.removeChannel(channel);
     };
   }, [profile?.id, fetchAppts]);
 

@@ -45,7 +45,7 @@ export default function ProfileScreen() {
     {
       icon: "bell",
       label: t("notifications"),
-      action: () => Alert.alert(t("notifications"), "Coming soon!")
+      action: () => router.push("/notifications")
     },
     {
       icon: "help-circle",

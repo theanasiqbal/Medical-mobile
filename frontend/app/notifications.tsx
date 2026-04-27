@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, RefreshControl, Pressable, Platform, Linking } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, ScrollView, RefreshControl, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useAuth } from '@/context/auth-context';
-import { patientApi } from '@/lib/api';
-import { router } from 'expo-router';
+import { router, Stack } from 'expo-router';
+import { useNotifications } from '@/context/notifications-context';
 
 const formatDistanceToNow = (date: string | Date) => {
   const now = new Date();
@@ -29,41 +28,14 @@ const formatDistanceToNow = (date: string | Date) => {
 };
 
 export default function NotificationsScreen() {
-  const { token, profile } = useAuth();
-  const [notifications, setNotifications] = useState<any[]>([]);
+  const { notifications, isLoading, refresh, markAsRead } = useNotifications();
   const [refreshing, setRefreshing] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  const fetchNotifications = async () => {
-    if (!token) return;
-    
-    const res = await patientApi.getNotifications(token);
-    if (res.data?.success) {
-      setNotifications(res.data.notifications);
-    }
-    setLoading(false);
-  };
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await fetchNotifications();
+    await refresh();
     setRefreshing(false);
   };
-
-  const markAsRead = async (id: string) => {
-    if (!token) return;
-    
-    const res = await patientApi.markNotificationRead(id, token);
-    if (res.data?.success) {
-      setNotifications(prev => 
-        prev.map(n => n.id === id ? { ...n, is_read: true } : n)
-      );
-    }
-  };
-
-  useEffect(() => {
-    fetchNotifications();
-  }, [token]);
 
   const handleNotificationPress = (notification: any) => {
     markAsRead(notification.id);
@@ -80,6 +52,7 @@ export default function NotificationsScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
+      <Stack.Screen options={{ headerShown: false }} />
       <View className="px-4 py-4 border-b border-border/10 flex-row items-center">
         <Pressable onPress={() => router.back()} className="mr-4">
           <MaterialCommunityIcons name="arrow-left" size={24} color="#64748b" />
@@ -93,7 +66,7 @@ export default function NotificationsScreen() {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {loading ? (
+        {isLoading ? (
           <View className="py-20 items-center">
             <Text className="text-muted-foreground">Loading...</Text>
           </View>
